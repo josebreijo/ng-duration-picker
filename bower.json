@@ -1,0 +1,26 @@
+{
+  "name": "ng-duration-picker",
+  "homepage": "https://github.com/josejbreijo/ng-duration-picker",
+  "authors": [
+    "Jose J. Breijo <josejbreijo99@gmail.com>"
+  ],
+  "description": "Angular directive to select time in the format \"1 year 2 months\".",
+  "main": "",
+  "keywords": [
+    "['angular'",
+    "'time'",
+    "'duration'",
+    "'picker']"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^v1.5.8"
+  }
+}

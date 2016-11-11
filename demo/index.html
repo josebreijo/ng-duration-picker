@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ng-duration-picker demo</title>
+  <link rel="stylesheet" href="../src/ng-duration-picker.css">
+  <style>
+    body {
+      height: 700px;
+    }
+  </style>
+</head>
+<body ng-app="demo">
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat explicabo neque amet odit magni laborum nisi, facere eaque nostrum dicta minus iusto, suscipit dolore, voluptas aliquid molestias obcaecati perferendis aperiam.</p>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, repudiandae, fuga. Necessitatibus assumenda blanditiis, reiciendis officiis dolores debitis, maiores sapiente est deserunt rerum placeat voluptatem quas, suscipit alias iure quod!</p>
+
+  <button ng-duration-picker model='duration'>
+    activate
+  </button>
+
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src='../src/ng-duration-picker.js'></script>
+
+  <script>
+    angular.module('demo', ['ngDurationPicker'])
+      .controller('demoController', function($scope) {
+        $scope.duration = {};
+      })
+  </script>
+
+</body>
+</html>
