@@ -1,0 +1,13 @@
+{
+  "name": "angular",
+  "version": "v1.5.8",
+  "license": "MIT",
+  "main": "./angular.js",
+  "ignore": [],
+  "dependencies": {},
+  "_source": "nexus+http://nexus.prod.uci.cu/repository/bower-all/angular",
+  "_target": "^v1.5.8",
+  "_release": "v1.5.8",
+  "_originalSource": "angular",
+  "_direct": true
+}
