@@ -5,10 +5,10 @@
     "Jose J. Breijo <josejbreijo99@gmail.com>"
   ],
   "description": "Angular directive to select time in the format \"1 year 2 months\".",
-  "main": "ng-duration-picker.js",
+  "main": "",
   "keywords": [
-    "['ng'",
-    "'angular'",
+    "['angular'",
+    "'time'",
     "'duration'",
     "'picker']"
   ],
@@ -21,6 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^v1.5.8"
+    "angular": "^v1.5.8",
+    "moment": "^2.16.0"
   }
 }
