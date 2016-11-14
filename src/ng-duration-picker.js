@@ -6,37 +6,44 @@
     .directive('ngDurationPicker', function() {
 
       const template =
-        `<div class="ngdp" style="top: {{pos.top}}px; left: {{pos.left}}px" ng-show="active">
-          <div class="top">
-            <code>{{value}} & {{category}} </code>
-            <code>{{log}}</code>
-          </div>
-          <div class="middle">
-            <button id="increment" ng-click="update(true)"> &uparrow; </button>
-            <input type="number" min="0" placeholder="amount"
-                   ng-model="value" ng-keypress="change($event)">
-            <button id="decrement" ng-click="update(false)"> &downarrow; </button>
-          </div>
-          <div class="bottom">
-            <button ng-click="done()">done</button>
-          </div>
-          <div class="nav">
-            <ul>
-              <li ng-repeat="category in categories">
-                <button ng-click="setCategory(category)">{{category}}</button>
-              </li>
-            </ul>
-          </div>
-        </div>`;
+        `<div class="ngdp" style="top: {{pos.top}}px; left: {{pos.left}}px" ng-show="ui.active" ng-class="{open: ui.open, dirty: ui.dirty}">
+  <div class="content">
+
+    <div class="top">
+      <div class="change">
+        <a href="#" class=""> go up </a>
+      </div>
+      <div class="toggle" ng-click="toggleNav($event)">
+        <i class="bar"> </i>
+        <i class="bar"> </i>
+        <i class="bar"> </i>
+      </div>
+    </div>
+    
+    <div class="middle">
+      {{category}}
+</div>
+  </div>
+  <div class="navigation">
+    <div class="back" style="visibility: {{ui.dirty ? 'visible' : 'hidden'}}">
+      <a href="#" ng-click="toggleNav($event)">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span>go back </span>
+      </a>
+    </div>
+    <h4>Select a category to start </h4>
+    <ul class="categories">
+      <li class="category" ng-repeat="category in categories">
+        <button type="button" class="btn btn-sm" ng-click="setCategory(category)">{{category}}</button>
+      </li>
+    </ul>
+  </div>
+</div>`;
 
       function getPosition(element) {
 
         const padding = 15;
 
-        /**
-         * Gives the size of the element and his position
-         * @see https://javascript.info/tutorial/coordinates
-         */
         let {
           bottom, height, left, right, top, width
         } = element.getBoundingClientRect();
@@ -45,7 +52,6 @@
         let visibleHeight = document.body.getBoundingClientRect().height;
         let up = top < (visibleHeight / 2);
 
-        // Element position plus padding to simulate popover
         top = top + padding;
         if (!up) top += element.clientHeight;
 
@@ -66,7 +72,8 @@
 
           scope.lazy = attrs.hasOwnProperty('lazy');
 
-          scope.active = false;
+          // TODO change to false to initialize hidden
+          scope.active = true;
           scope.insertPicker();
 
           angular.element(element)
@@ -90,6 +97,17 @@
             angular.element(document.body).prepend(picker);
           };
 
+          $scope.ui = {
+            active: true,
+            open: true,
+            dirty: false
+          };
+
+          $scope.toggleNav = $event => {
+            $scope.ui.open = !$scope.ui.open;
+            $event.preventDefault();
+          };
+
           $scope.value = 0;
           $scope.category = 'minutes';
           $scope.duration = moment.duration();
@@ -106,6 +124,8 @@
           $scope.setCategory = category => {
             $scope.category = category;
             $scope.value = $scope.log[category];
+            $scope.ui.open = false;
+            $scope.ui.dirty = true;
           };
 
           $scope.update = add => {

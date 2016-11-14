@@ -1,8 +1,152 @@
 .ngdp {
   display: block;
   position: absolute;
-  width: 400px;
-  height: 400px
-  border: 1px solid black;
-  background-color: teal;
+  border-radius: 10px;
+  width: 230px;
+  height: 200px;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 1px 1px 3px rgba(0,0,0,.5);
 }
+
+.ngdp a {
+  text-decoration: none
+}
+
+.ngdp .content,
+.ngdp .navigation {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+}
+
+.ngdp .change {
+  width: 85%;
+  float: left;
+  text-align: center;
+}
+
+.ngdp .change a {
+  display: block;
+  width: 100%;
+  padding: 6px 0;
+  text-decoration: none;
+}
+
+.ngdp .toggle {
+  width: 15%;
+  float: left;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.ngdp .toggle .bar {
+  display: block;
+  height: 3px;
+  margin: 5px auto;
+  background-color: gray;
+}
+
+.ngdp .navigation {
+  transition: .3s ease width;
+  background-color: #009fe3;
+  width: 0;
+  height: 200px;
+  overflow: hidden;
+}
+
+.ngdp.open .navigation {
+  width: 100%;
+}
+
+.ngdp .back {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.ngdp .back a {
+  color: white;
+  text-decoration: none;
+  transition: .2s ease all;
+}
+
+.ngdp .back a:hover {
+  margin-left: 10px;
+}
+
+.ngdp:not(.dirty) .navigation h4 {
+  margin-top: 0;
+}
+
+.ngdp .navigation .back,
+.ngdp .navigation h4{
+  opacity: 0;
+  transition: opacity .1ms ease-out 0ms;
+}
+
+.ngdp.open .navigation .back,
+.ngdp.open .navigation h4 {
+  opacity: 1;
+  transition: .3s ease-in opacity;
+  transition-delay: .2s;
+}
+
+.ngdp.open .navigation .back {
+  transition-delay: .1s;
+}
+
+.ngdp .categories > li:nth-child(1) {
+  margin-left: 10px;
+}
+
+.ngdp .category button {
+  transform: scale(0);
+}
+
+.ngdp .category button:hover {
+  color: #009fe3 !important;
+  background-color: white !important;
+}
+
+.ngdp.open .category button {
+  transform: scale(1);
+  transition: .3s ease transform;
+  transition-delay: .3s;
+  background: transparent;
+  border: 1px solid;
+  color: white;
+}
+
+.ngdp .back {
+  padding: 5px;
+  color: black;
+}
+
+.ngdp .back:hover span:not(.glyphicon) {
+  transform: translateX(5px);
+}
+
+.ngdp .navigation h4 {
+  text-align: center;
+  margin: 10px;
+  color: white;
+}
+
+.ngdp .categories {
+  list-style: none;
+  overflow: hidden;
+  padding-left: 8px;
+  text-align: center;
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ngdp .category {
+  float: left;
+  margin: 3px;
+  margin-left: 10;
+}
+
+
+

@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>ng-duration-picker demo</title>
-  <link rel="stylesheet" href="../src/ng-duration-picker.css">
+  <link rel="stylesheet" href="src/ng-duration-picker.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
 </head>
 <body ng-app="demo">
+
+  <p>asdhasdasdasd</p>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi atque cupiditate et eum in itaque magnam maxime
+    neque nesciunt nobis provident, quae, quibusdam quidem quisquam ratione sapiente sequi tenetur vel?</p>
 
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat explicabo neque amet odit magni laborum nisi,
     facere eaque nostrum dicta minus iusto, suscipit dolore, voluptas aliquid molestias obcaecati perferendis
@@ -22,23 +29,17 @@
     maiores molestias nihil numquam perspiciatis placeat possimus quae tempore tenetur vitae. Quos velit,
     voluptatibus?</p>
 
-  <p>Consectetur libero magni neque quas qui repudiandae saepe vitae voluptate. At cupiditate dolorem ea, illum mollitia
-    nesciunt placeat qui quo, repellendus reprehenderit sapiente, unde vitae. Aliquid dolorem fugit nobis quis!</p>
-
-  <p>Accusamus amet autem consectetur corporis dolor ea facere in, laboriosam, minima minus modi obcaecati officia porro
-    provident quae quisquam rerum unde vero? Commodi deleniti in maxime perspiciatis quo rerum, voluptatibus.</p>
-
   <button ng-duration-picker result="result" human="human" output="minutes" lazy>
     activate
   </button>
 
   <pre>
-    {{result}} | {{human}}
+    {{result}} {{human}}
   </pre>
 
-  <script src="../bower_components/moment/moment.js"></script>
-  <script src="../bower_components/angular/angular.js"></script>
-  <script src='../src/ng-duration-picker.js'></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src='src/ng-duration-picker.js'></script>
 
   <script>
     angular.module('demo', ['ngDurationPicker'])
