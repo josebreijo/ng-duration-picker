@@ -6,58 +6,110 @@
     .directive('ngDurationPicker', function() {
 
       const template =
-        `<div class="ngdp" style="top: {{pos.top}}px; left: {{pos.left}}px" ng-show="ui.active" ng-class="{open: ui.open, dirty: ui.dirty}">
-  <div class="content">
+        `<div class="ngdp" style="top: {{ui.pos.top}}px; left: {{ui.pos.left}}px" 
+          ng-class="{'ngdp-visible': ui.visible, 'ngdp-open': ui.open, 'ngdp-dirty': ui.dirty}">
 
-    <div class="top">
-      <div class="change">
-        <a href="#" class=""> go up </a>
-      </div>
-      <div class="toggle" ng-click="toggleNav($event)">
-        <i class="bar"> </i>
-        <i class="bar"> </i>
-        <i class="bar"> </i>
-      </div>
-    </div>
-    
-    <div class="middle">
-      {{category}}
-</div>
-  </div>
-  <div class="navigation">
-    <div class="back" style="visibility: {{ui.dirty ? 'visible' : 'hidden'}}">
-      <a href="#" ng-click="toggleNav($event)">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span>go back </span>
-      </a>
-    </div>
-    <h4>Select a category to start </h4>
-    <ul class="categories">
-      <li class="category" ng-repeat="category in categories">
-        <button type="button" class="btn btn-sm" ng-click="setCategory(category)">{{category}}</button>
-      </li>
-    </ul>
-  </div>
-</div>`;
+            <div class="ngdp-content">
+              <div class="ngdp-top">
+                <div class="ngdp-change">
+                  <a href="#" ng-click="changeCategory(next, $event)"> {{next}} </a>
+                </div>
+                <div class="ngdp-toggle" ng-click="toggleNav($event)">
+                  <i class="ngdp-bar"> </i>
+                  <i class="ngdp-bar"> </i>
+                  <i class="ngdp-bar"> </i>
+                </div>
+              </div>    
+              <div class="ngdp-middle">
+                <div class="col-xs-12">
+                  <div class="ngdp-updown col-xs-5 text-center">
+                    <a href="#" ng-click="updateValue(true, $event)">
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                    <input type="text" class="form-control" ng-model="value" 
+                           ng-change="changeInput()" ng-class="{'ngdp-error': ui.error}">
+                    <a href="#" ng-click="updateValue(false, $event)">
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </a>
+                  </div>
+                  <div class="col-xs-7">
+                    <h4 class="text-muted">{{category}}</h4>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 text-center">
+                    <small class="text-muted"> {{preview.human}} </small>
+                  </div>
+                </div>
+              </div>
+              <div class="ngdp-bottom">
+                <div class="ngdp-change">
+                  <a href="#" ng-click="changeCategory(previous, $event)"> {{previous}}</a>
+                </div>
+                <div class="ngdp-done" ng-click="bindToExternalModel($event)">
+                  <span class="ngdp-check"> </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ngdp-navigation">
+              <div class="ngdp-back" style="visibility: {{ui.dirty ? 'visible' : 'hidden'}}">
+                <a href="#" ng-click="toggleNav($event)">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  <span>go back </span>
+                </a>
+              </div>
+              <h4>Select a category to start </h4>
+              <ul class="ngdp-categories">
+                <li class="ngdp-category" ng-repeat="category in categories">
+                  <button type="button" class="btn btn-sm" ng-click="changeCategory(category)">{{category}}</button>
+                </li>
+              </ul>
+            </div>
+
+          </div>`;
 
       function getPosition(element) {
 
         const padding = 15;
+        const ngdpWidth = 230;
+        const ngdpHeight = 200;
 
+        // Gets the current position and size of the element
+        // referent to the visible area of the browser
         let {
-          bottom, height, left, right, top, width
+          height, width, top
         } = element.getBoundingClientRect();
 
-        // TODO check in scroll
-        let visibleHeight = document.body.getBoundingClientRect().height;
-        let up = top < (visibleHeight / 2);
+        // Check if the element in which the directive was used
+        // it's above the center of the screen
+        let visibleHeight = window.innerHeight;
+        let up = top > (visibleHeight / 2);
 
-        top = top + padding;
-        if (!up) top += element.clientHeight;
+        // Change the top offset to stick the UI to the element
+        top = element.offsetTop;
 
-        left = left + width / 2;
+        if (up) {
+          top -= padding + ngdpHeight;
+        } else {
+          top += padding + height;
+        }
 
-        return {top, left, up};
+        let left = element.offsetLeft;
+        let middle = left + width / 2;
+
+        let inTheMiddle = middle  > ngdpWidth / 2 && 
+                          middle <= document.body.clientWidth - ngdpWidth / 2;
+
+        let rightSide = middle > document.body.clientWidth - ngdpWidth / 2;
+
+        if (inTheMiddle)
+          left = middle - ngdpWidth / 2;
+        
+        else if (rightSide)
+          left = left + width - ngdpWidth;
+
+        return {top, left};
       }
 
       return {
@@ -65,42 +117,47 @@
         scope: {
           result: '=',
           human: '=',
-          output: '@'
+          output: '@',
+          lang: '@'
         },
         link(scope, element, attrs) {
           document.body.style.position = 'relative';
 
           scope.lazy = attrs.hasOwnProperty('lazy');
 
+          // TODO add handler to hide if clicked outside
           // TODO change to false to initialize hidden
-          scope.active = true;
           scope.insertPicker();
 
-          angular.element(element)
-            .on('click', ev =>
-              scope.$apply(() => {
-                scope.active = !scope.active;
-                if (scope.active) {
-                  let {
-                    top, left, up
-                  } = getPosition(element[0]);
-                  scope.pos = {top, left};
-                  scope.up = up;
-                }
-              })
-            );
+          function updateUI(ev) {
+            scope.$apply(() => {
+              if (ev.type === 'click')
+                scope.ui.visible = !scope.ui.visible;
+
+              if (scope.ui.visible) {
+                let { top, left } = getPosition(element[0]);
+                scope.ui.pos = {top, left};
+              }
+            })
+          }
+
+          angular.element(element).on('click', ev => updateUI(ev) );
+          angular.element(window).on('scroll', ev => updateUI(ev) );
         },
         controller($scope, $compile) {
+
+          $scope.ui = {
+            visible: false,            // ui is visible
+            open: true,                // open navigation
+            dirty: false,              // first time selected category
+            error: false,              // input is a wrong number
+            pos: {top: 0, left: 0},    // position of the directive
+            lang: $scope.lang || 'es', // i18n
+          };
 
           $scope.insertPicker = () => {
             var picker = $compile(template)($scope);
             angular.element(document.body).prepend(picker);
-          };
-
-          $scope.ui = {
-            active: true,
-            open: true,
-            dirty: false
           };
 
           $scope.toggleNav = $event => {
@@ -108,34 +165,31 @@
             $event.preventDefault();
           };
 
-          $scope.value = 0;
           $scope.category = 'minutes';
-          $scope.duration = moment.duration();
-          $scope.pos = {top: 0, left: 0};
           $scope.categories = [
             'milliseconds', 'seconds', 'minutes', 'hours',
             'days', 'weeks', 'months', 'years'
           ];
-          $scope.log = {};
+          $scope.log = $scope.preview = {};
           $scope.categories.forEach(cat => $scope.log[cat] = 0);
 
           $scope.output = $scope.output || 'minutes';
 
-          $scope.setCategory = category => {
+          $scope.changeCategory = (category, $event) => {
+            $event && $event.preventDefault();
+            if (category.indexOf('limit') !== -1) return;
+
             $scope.category = category;
             $scope.value = $scope.log[category];
             $scope.ui.open = false;
             $scope.ui.dirty = true;
+
+            let current = $scope.categories.indexOf(category);
+            $scope.next = $scope.categories[current + 1] || 'reached limit';
+            $scope.previous = $scope.categories[current - 1] || 'reached limit';
           };
 
-          $scope.update = add => {
-            // TODO: refactor this
-            $scope.value = add ? ++$scope.log[$scope.category] :
-            $scope.value && --$scope.log[$scope.category];
-          };
-
-          $scope.done = () => {
-
+          $scope.updatePreview = () => {
             function buildString() {
               let customString = [];
               $scope.categories.forEach(category => {
@@ -149,11 +203,35 @@
             }
 
             let duration = moment.duration($scope.log);
-            $scope.human = $scope.lazy ? duration.humanize() : buildString();
-            $scope.result = duration.as($scope.output);
+            $scope.preview.human = $scope.lazy ? 
+                duration.humanize() : buildString();
+            $scope.preview.result = duration.as($scope.output);
+          }
+
+          $scope.updateValue = (add, $event) => {
+            $event && $event.preventDefault();
+            $scope.value = add ? ++$scope.log[$scope.category] :
+                 $scope.value && --$scope.log[$scope.category] ;
+
+            $scope.updatePreview();
           };
 
+          $scope.changeInput = () => {
+            let val = Number($scope.value);
+            if (Number.isNaN(val) || val < 0)
+              return $scope.ui.error = true
 
+            $scope.ui.error = false;
+
+            $scope.log[$scope.category] = $scope.value;
+            $scope.updatePreview();
+          }
+
+          $scope.bindToExternalModel = () => {
+            $scope.human = $scope.preview.human;
+            $scope.result = $scope.preview.result;
+            $scope.ui.visible = false;
+          };
         }
       }
     })
