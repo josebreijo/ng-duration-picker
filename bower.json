@@ -1,7 +1,8 @@
 {
   "name": "ng-duration-picker",
   "homepage": "https://github.com/josejbreijo/ng-duration-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "main": "./src/ng-duration-picker.js",
   "authors": [
     "Jose J. Breijo <josejbreijo99@gmail.com>",
     "Adrian Hernandez <adrian2monk@gmail.com>"

@@ -1,4 +1,7 @@
 /* TODO add vendors in gulp pipeline */
+.ngdp-wrapper {
+  position: relative;
+}
 
 .ngdp {
   display: block;
@@ -10,6 +13,7 @@
   transform: scale(0);
   background-color: white;
   overflow: hidden;
+  z-index: 9999;
   box-shadow: 2px 0 10px rgba(0, 0, 0, .7);
   transition: .3s transform cubic-bezier(0.685, 0.195, 0.475, 1.545),
   .3s opacity ease-out;
@@ -156,6 +160,7 @@
 .ngdp-back {
   margin-top: 5px;
   margin-left: 5px;
+  text-align: left;
 }
 
 .ngdp-back a {

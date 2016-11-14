@@ -78,7 +78,7 @@
         // Gets the current position and size of the element
         // referent to the visible area of the browser
         let {
-          height, width, top
+          height, width, top, left
         } = element.getBoundingClientRect();
 
         // Check if the element in which the directive was used
@@ -86,16 +86,12 @@
         let visibleHeight = window.innerHeight;
         let up = top > (visibleHeight / 2);
 
-        // Change the top offset to stick the UI to the element
-        top = element.offsetTop;
-
         if (up) {
-          top -= padding + ngdpHeight;
+          top = -(padding + ngdpHeight);
         } else {
-          top += padding + height;
+          top = padding + height;
         }
 
-        let left = element.offsetLeft;
         let middle = left + width / 2;
 
         let inTheMiddle = middle  > ngdpWidth / 2 && 
@@ -121,12 +117,11 @@
           lang: '@'
         },
         link(scope, element, attrs) {
-          document.body.style.position = 'relative';
-
+                
           scope.lazy = attrs.hasOwnProperty('lazy');
+          angular.element(element).wrap(`<div class="ngdp-wrapper"><div>`);
 
           // TODO add handler to hide if clicked outside
-          // TODO change to false to initialize hidden
           scope.insertPicker();
 
           function updateUI(ev) {
@@ -156,8 +151,9 @@
           };
 
           $scope.insertPicker = () => {
-            var picker = $compile(template)($scope);
-            angular.element(document.body).prepend(picker);
+            let picker = $compile(template)($scope);
+            let DOMWrapper = document.getElementsByClassName('ngdp-wrapper');
+            angular.element(DOMWrapper).prepend(picker);
           };
 
           $scope.toggleNav = $event => {
