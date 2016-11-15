@@ -5,6 +5,10 @@ $doneBackColor: #5cb85c;
 $navBackColor: #009fe3;
 $categoryColor: #009fe3;
 
+.ngdp-wrapper {
+  position: relative;
+}
+
 .ngdp {
   display: block;
   position: absolute;
@@ -12,6 +16,7 @@ $categoryColor: #009fe3;
   width: 230px;
   height: 200px;
   opacity: 0;
+  z-index: 9999;
   transform: scale(0);
   background-color: white;
   overflow: hidden;

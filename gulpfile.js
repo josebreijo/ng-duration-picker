@@ -26,13 +26,22 @@ gulp.task('lint', function() {
     .pipe(plugins.jshint('.jshintrc'))
     .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
-gulp.task('serve', ['lint', 'styles'], function() {
+
+gulp.task('serve', ['watch'], function() {
   return gulp.src('.')
     .pipe(plugins.webserver({
       fallback: path.html,
-      livereload: true,
+      livereload: true
     })); 
 });
+
+gulp.task('watch', function () {
+  plugins.watch(path.styles, { ignoreInitial: false })
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.sass())
+    .pipe(plugins.sourcemaps.write('.'))
+    .pipe(gulp.dest(path.dest));
+})
 
 // development tasks
 gulp.task('styles', function () {

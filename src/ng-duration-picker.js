@@ -74,7 +74,7 @@
     // Gets the current position and size of the element
     // referent to the visible area of the browser
     let {
-      height, width, top
+      height, width, top, left
     } = element.getBoundingClientRect();
 
     // Check if the element in which the directive was used
@@ -83,15 +83,8 @@
     let up = top > (visibleHeight / 2);
 
     // Change the top offset to stick the UI to the element
-    top = element.offsetTop;
+    top = up ? -(padding + ngdpHeight) : (padding + height);
 
-    if (up) {
-      top -= padding + ngdpHeight;
-    } else {
-      top += padding + height;
-    }
-
-    let left = element.offsetLeft;
     let middle = left + width / 2;
 
     let inTheMiddle = middle  > ngdpWidth / 2 && 
@@ -120,12 +113,10 @@
         lang: '@'
       },
       link(scope, element, attrs) {
-        document.body.style.position = 'relative';
-
         scope.lazy = attrs.hasOwnProperty('lazy');
+        angular.element(element).wrap('<div class="ngdp-wrapper"></div>')
 
         // TODO add handler to hide if clicked outside
-        // TODO change to false to initialize hidden
         scope.insertPicker();
 
         function updateUI(ev) {
@@ -156,11 +147,13 @@
         };
 
         $scope.insertPicker = () => {
-          var picker = $compile(template)($scope);
-          angular.element(document.body).prepend(picker);
+          let picker = $compile(template)($scope);
+          let DOMWrapper = document.getElementsByClassName('ngdp-wrapper');
+          angular.element(DOMWrapper).prepend(picker);
         };
 
         $scope.toggleNav = $event => {
+          if ($scope.ui.error) return;
           $scope.ui.open = !$scope.ui.open;
           $event.preventDefault();
         };
@@ -173,21 +166,27 @@
         $scope.log = $scope.preview = {};
         $scope.categories.forEach(cat => $scope.log[cat] = 0);
 
-        $scope.output = $scope.output || 'minutes';
+        if (!$scope.output)
+          $scope.customOutput = 'minutes';
+        else 
+          $scope.customOutput = $scope.categories.indexOf($scope.output) === -1 ? 
+            'minutes' : $scope.output;
 
         $scope.changeCategory = (category, $event) => {
-          let current;
           $event && $event.preventDefault();
-          if (category.indexOf('limit') === -1) {
-            $scope.category = category;
-            $scope.value = $scope.log[category];
-            $scope.ui.open = false;
-            $scope.ui.dirty = true;
+          if ($scope.ui.error) return;
 
-            current = $scope.categories.indexOf(category);
-            $scope.next = $scope.categories[current + 1] || 'reached limit';
-            $scope.previous = $scope.categories[current - 1] || 'reached limit';
-          }
+          if (category.indexOf('limit') !== -1)
+            return false;
+
+          $scope.category = category;
+          $scope.value = $scope.log[category];
+          $scope.ui.open = false;
+          $scope.ui.dirty = true;
+
+          let current = $scope.categories.indexOf(category);
+          $scope.next = $scope.categories[current + 1] || 'reached limit';
+          $scope.previous = $scope.categories[current - 1] || 'reached limit';
         };
 
         $scope.updatePreview = () => {
@@ -206,13 +205,14 @@
           }
 
           let duration = moment.duration($scope.log);
-          $scope.preview.human = $scope.lazy ? 
+          $scope.preview.human = $scope.lazy ?
               duration.humanize() : buildString();
-          $scope.preview.result = duration.as($scope.output);
+          $scope.preview.result = duration.as($scope.customOutput);
         }
 
         $scope.updateValue = (add, $event) => {
           $event && $event.preventDefault();
+          if ($scope.ui.error) return;
           $scope.value = add ? ++$scope.log[$scope.category] :
                $scope.value && --$scope.log[$scope.category];
 
@@ -223,6 +223,7 @@
           let val = Number($scope.value);
           if (Number.isNaN(val) || val < 0) {
             $scope.ui.error = true;
+            $scope.preview.human = 'wrong input';
             return;
           }
 
@@ -233,6 +234,7 @@
         };
 
         $scope.bindToExternalModel = () => {
+          if ($scope.ui.error) return;
           $scope.human = $scope.preview.human;
           $scope.result = $scope.preview.result;
           $scope.ui.visible = false;

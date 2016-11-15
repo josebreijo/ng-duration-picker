@@ -1,3 +1,6 @@
+.ngdp-wrapper {
+  position: relative; }
+
 .ngdp {
   display: block;
   position: absolute;
@@ -5,6 +8,7 @@
   width: 230px;
   height: 200px;
   opacity: 0;
+  z-index: 9999;
   transform: scale(0);
   background-color: white;
   overflow: hidden;

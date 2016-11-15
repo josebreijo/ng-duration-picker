@@ -1,7 +1,7 @@
 {
   "name": "ng-duration-picker",
-  "version": "1.0.0",
-  "description": "Angular directive to select time in the format \"1 year 2 months\". Using moment duration for time duration handling.",
+  "version": "1.0.2",
+  "description": "Lightweight AngularJS directive to select time in a MomentJS style: \"1 year 2 months\".",
   "main": "src/ng-duration-picker.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -34,6 +34,7 @@
     "gulp-sass": "2.3.2",
     "gulp-sourcemaps": "2.2.0",
     "gulp-uglify": "2.0.0",
+    "gulp-watch": "^4.3.10",
     "gulp-webserver": "0.9.1",
     "jshint-stylish": "2.2.1",
     "karma": "1.3.0"
