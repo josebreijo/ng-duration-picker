@@ -92,11 +92,12 @@
 
     let rightSide = middle > document.body.clientWidth - ngdpWidth / 2;
 
-    if (inTheMiddle) {
-      left = middle - ngdpWidth / 2;
-    } else if (rightSide) {
-      left = left + width - ngdpWidth;
-    }
+    if (inTheMiddle)
+      left = width / 2 - ngdpWidth / 2;
+    else if (rightSide)
+      left = width - ngdpWidth;
+    else
+      left = 0;
 
     return {top, left};
   }
@@ -135,7 +136,7 @@
         angular.element(element).on('click', ev => updateUI(ev) );
         angular.element(window).on('scroll', ev => updateUI(ev) );
       },
-      controller($scope, $compile) {
+      controller: ['$scope', '$compile', function($scope, $compile) {
 
         $scope.ui = {
           visible: false,            // ui is visible
@@ -239,7 +240,7 @@
           $scope.result = $scope.preview.result;
           $scope.ui.visible = false;
         };
-      }
+      }]
     };
 
     return Factory;

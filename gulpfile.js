@@ -54,7 +54,7 @@ gulp.task('styles', function () {
 gulp.task('default', ['serve']);
 
 // production tasks
-gulp.task('build', ['lint', 'styles'], function() {
+gulp.task('build', [ 'styles'], function() {
   return gulp.src(path.source)
     .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())

@@ -16,7 +16,7 @@ $categoryColor: #009fe3;
   width: 230px;
   height: 200px;
   opacity: 0;
-  z-index: 9999;
+  z-index: 100;
   transform: scale(0);
   background-color: white;
   overflow: hidden;
@@ -143,6 +143,7 @@ $categoryColor: #009fe3;
 .ngdp-navigation {
   transition: .3s ease width;
   background-color: $navBackColor;
+  z-index: 99;
   width: 0;
   height: 200px;
   overflow: hidden;
