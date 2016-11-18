@@ -94,12 +94,13 @@
 
     let rightSide = middle > document.body.clientWidth - ngdpWidth / 2;
 
-    if (inTheMiddle)
+    if (inTheMiddle) {
       left = width / 2 - ngdpWidth / 2;
-    else if (rightSide)
+    } else if (rightSide) {
       left = width - ngdpWidth;
-    else
+    } else {
       left = 0;
+    }
 
     return {top, left};
   }
@@ -117,7 +118,7 @@
       },
       link(scope, element, attrs) {
         scope.lazy = attrs.hasOwnProperty('lazy');
-        angular.element(element).wrap('<div class="ngdp-wrapper"></div>')
+        angular.element(element).wrap('<div class="ngdp-wrapper"></div>');
 
         // TODO add handler to hide if clicked outside
         scope.insertPicker();
@@ -156,9 +157,10 @@
         };
 
         $scope.toggleNav = $event => {
-          if ($scope.ui.error) return;
-          $scope.ui.open = !$scope.ui.open;
-          $event.preventDefault();
+          if (!$scope.ui.error) {
+            $scope.ui.open = !$scope.ui.open;
+            $event.preventDefault();
+          } 
         };
 
         $scope.category = 'minutes';
@@ -170,27 +172,32 @@
         $scope.categories.forEach(cat => $scope.log[cat] = 0);
         $scope.preview = {result: 0, human: 'nothing selected yet ...'}
 
-        if (!$scope.output)
+        if (!$scope.output) {
           $scope.customOutput = 'minutes';
-        else 
+        } else  {
           $scope.customOutput = $scope.categories.indexOf($scope.output) === -1 ? 
             'minutes' : $scope.output;
+        }
 
         $scope.changeCategory = (category, $event) => {
           $event && $event.preventDefault();
-          if ($scope.ui.error) return;
+          if ($scope.ui.error) {
+            return;
+          } 
 
-          if (category.indexOf('limit') !== -1)
+          if (category.indexOf('limit') === -1) {
+            $scope.category = category;
+            $scope.value = $scope.log[category];
+            $scope.ui.open = false;
+            $scope.ui.dirty = true;
+
+            let current = $scope.categories.indexOf(category);
+            $scope.next = $scope.categories[current + 1] || 'reached limit';
+            $scope.previous = $scope.categories[current - 1] || 'reached limit';
+          } else {
             return false;
+          }
 
-          $scope.category = category;
-          $scope.value = $scope.log[category];
-          $scope.ui.open = false;
-          $scope.ui.dirty = true;
-
-          let current = $scope.categories.indexOf(category);
-          $scope.next = $scope.categories[current + 1] || 'reached limit';
-          $scope.previous = $scope.categories[current - 1] || 'reached limit';
         };
 
         $scope.updatePreview = () => {
@@ -215,15 +222,16 @@
           if (!$scope.preview.human)
             $scope.preview.human = 'nothing selected yet ...'
           $scope.preview.result = duration.as($scope.customOutput);
-        }
+        };
 
         $scope.updateValue = (add, $event) => {
           $event && $event.preventDefault();
-          if ($scope.ui.error) return;
-          $scope.value = add ? ++$scope.log[$scope.category] :
-               $scope.value && --$scope.log[$scope.category];
+          if (!$scope.ui.error) {
+            $scope.value = add ? ++$scope.log[$scope.category] :
+                 $scope.value && --$scope.log[$scope.category];
 
-          $scope.updatePreview();
+            $scope.updatePreview();
+          } 
         };
 
         $scope.changeInput = () => {
@@ -241,10 +249,11 @@
         };
 
         $scope.bindToExternalModel = () => {
-          if ($scope.ui.error) return;
-          $scope.human = $scope.preview.human;
-          $scope.result = $scope.preview.result;
-          $scope.ui.visible = false;
+          if (!$scope.ui.error) {
+            $scope.human = $scope.preview.human;
+            $scope.result = $scope.preview.result;
+            $scope.ui.visible = false;
+          } 
         };
       }]
     };

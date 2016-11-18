@@ -27,7 +27,7 @@ gulp.task('lint', function() {
     .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('serve', ['watch'], function() {
+gulp.task('serve', ['lint','watch'], function() {
   return gulp.src('.')
     .pipe(plugins.webserver({
       fallback: path.html,
@@ -54,7 +54,7 @@ gulp.task('styles', function () {
 gulp.task('default', ['serve']);
 
 // production tasks
-gulp.task('build', [ 'styles'], function() {
+gulp.task('build', ['lint','styles'], function() {
   return gulp.src(path.source)
     .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())
