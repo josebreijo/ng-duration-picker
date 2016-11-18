@@ -9,7 +9,8 @@
         <div class="ngdp-content">
           <div class="ngdp-top">
             <div class="ngdp-change">
-              <a href="#" ng-click="changeCategory(next, $event)"> {{next}} </a>
+              <a href="#" ng-click="changeCategory(next, $event)" 
+                 ng-class="{'text-muted': next.indexOf('limit') !== -1}"> {{next}} </a>
             </div>
             <div class="ngdp-toggle" ng-click="toggleNav($event)">
               <i class="ngdp-bar"> </i>
@@ -29,7 +30,7 @@
                   <span class="glyphicon glyphicon-minus"></span>
                 </a>
               </div>
-              <div class="col-xs-7">
+              <div class="col-xs-7 text-center">
                 <h4 class="text-muted">{{category}}</h4>
               </div>
             </div>
@@ -41,7 +42,8 @@
           </div>
           <div class="ngdp-bottom">
             <div class="ngdp-change">
-              <a href="#" ng-click="changeCategory(previous, $event)"> {{previous}}</a>
+              <a href="#" ng-click="changeCategory(previous, $event)"
+                 ng-class="{'text-muted': previous.indexOf('limit') !== -1}"> {{previous}}</a>
             </div>
             <div class="ngdp-done" ng-click="bindToExternalModel($event)">
               <span class="ngdp-check"> </span>
@@ -56,7 +58,7 @@
               <span>go back </span>
             </a>
           </div>
-          <h4>Select a category to start </h4>
+          <h4>Select a category </h4>
           <ul class="ngdp-categories">
             <li class="ngdp-category" ng-repeat="category in categories">
               <button type="button" class="btn btn-sm" ng-click="changeCategory(category)">{{category}}</button>
@@ -164,8 +166,9 @@
           'milliseconds', 'seconds', 'minutes', 'hours',
           'days', 'weeks', 'months', 'years'
         ];
-        $scope.log = $scope.preview = {};
+        $scope.log = {};
         $scope.categories.forEach(cat => $scope.log[cat] = 0);
+        $scope.preview = {result: 0, human: 'nothing selected yet ...'}
 
         if (!$scope.output)
           $scope.customOutput = 'minutes';
@@ -208,6 +211,9 @@
           let duration = moment.duration($scope.log);
           $scope.preview.human = $scope.lazy ?
               duration.humanize() : buildString();
+
+          if (!$scope.preview.human)
+            $scope.preview.human = 'nothing selected yet ...'
           $scope.preview.result = duration.as($scope.customOutput);
         }
 

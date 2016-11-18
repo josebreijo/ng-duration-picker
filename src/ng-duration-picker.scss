@@ -64,10 +64,27 @@ $categoryColor: #009fe3;
   height: 200px;
 }
 
+.ngdp-change a {
+  &:hover,
+  &:focus {
+    color: #337ab7;
+  }
+  &:hover.text-muted,
+  &:focus.text-muted {
+    color: #7b7777;
+  }
+}
+
 .ngdp-top {
   overflow: hidden;
+  box-shadow: 0 0 1px rgba(0, 0, 0, .3);
+  transition: .2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 4px rgba(0,0,0,.6);
+  }
   .ngdp-change a {
-    border-bottom: 1px solid $borderChangeColor;
+    font-weight: bold;
   }
 }
 
@@ -82,29 +99,39 @@ $categoryColor: #009fe3;
   padding: 2px 8px 3px 7px;
   cursor: pointer;
   background-color: grey;
+  transition: .2s ease-in background-color;
   .ngdp-bar {
     display: block;
     height: 3px;
     margin: 5px auto;
     background-color: white;
+    transition: .1s .2s ease-in background-color;
+  }
+  &:hover {
+    background-color: white;
+    .ngdp-bar {
+      background-color: grey;
+    }
   }
 }
 
 .ngdp-middle {
-  padding-top: 10px;
+  padding-top: 15px;
   h4 {
     margin-top: 33px;
     margin-left: -10px;
+    text-shadow: 0 0 2px rgba(0,0,0,.1);
   }
 }
  
 .ngdp-updown {
   input {
     padding: 6px 10px;
+    text-align: center;
   }
   span {
-    font-size: 1.2em;
     margin: 4px;
+    font-size: 1.2em;
     color: rgba(119, 119, 119, 0.98);
   }
 }
@@ -114,6 +141,11 @@ $categoryColor: #009fe3;
   bottom: 0;
   width: 100%;
   overflow: hidden;
+  box-shadow: 0 0 1px rgba(0, 0, 0, .3);
+  transition: .2s ease-in-out;
+  &:hover {
+    box-shadow: 0 0 4px rgba(0,0,0,.6);
+  }
   .ngdp-done {
     width: 18%;
     display: block;
@@ -122,7 +154,7 @@ $categoryColor: #009fe3;
     background-color: $doneBackColor;
   }
   .ngdp-change a {
-    border-top: 1px solid $borderChangeColor;
+    font-weight: bold;
   }
 }
 
