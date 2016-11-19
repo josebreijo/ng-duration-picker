@@ -8,6 +8,7 @@ var path = {
     test: ['test/*.spec.js'],
     source: 'src/*.js',
     styles: 'src/*.scss',
+    build: 'ng-duration-picker.js',
     min: 'ng-duration-picker.min.js',
     dest: 'dist'
 };
@@ -54,7 +55,17 @@ gulp.task('styles', function () {
 gulp.task('default', ['serve']);
 
 // production tasks
-gulp.task('build', ['lint','styles'], function() {
+gulp.task('dist', function() {
+  return gulp.src(path.source)
+  .pipe(plugins.plumber())
+  .pipe(plugins.babel({
+      presets: ['es2015']
+  }))
+  .pipe(plugins.concat(path.build))
+  .pipe(gulp.dest(path.dest));
+});
+
+gulp.task('build', ['lint', 'dist', 'styles'], function() {
   return gulp.src(path.source)
     .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())

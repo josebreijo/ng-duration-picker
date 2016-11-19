@@ -170,7 +170,7 @@
         ];
         $scope.log = {};
         $scope.categories.forEach(cat => $scope.log[cat] = 0);
-        $scope.preview = {result: 0, human: 'nothing selected yet ...'}
+        $scope.preview = {result: 0, human: 'nothing selected yet ...'};
 
         if (!$scope.output) {
           $scope.customOutput = 'minutes';
@@ -180,7 +180,10 @@
         }
 
         $scope.changeCategory = (category, $event) => {
-          $event && $event.preventDefault();
+          if ($event){
+            $event.preventDefault();
+          }
+
           if ($scope.ui.error) {
             return;
           } 
@@ -219,13 +222,18 @@
           $scope.preview.human = $scope.lazy ?
               duration.humanize() : buildString();
 
-          if (!$scope.preview.human)
-            $scope.preview.human = 'nothing selected yet ...'
+          if (!$scope.preview.human){
+            $scope.preview.human = 'nothing selected yet ...';
+          }
+
           $scope.preview.result = duration.as($scope.customOutput);
         };
 
         $scope.updateValue = (add, $event) => {
-          $event && $event.preventDefault();
+          if ($event){
+            $event.preventDefault();
+          }
+          
           if (!$scope.ui.error) {
             $scope.value = add ? ++$scope.log[$scope.category] :
                  $scope.value && --$scope.log[$scope.category];

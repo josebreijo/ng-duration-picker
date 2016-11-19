@@ -1,13 +1,16 @@
 {
   "name": "ng-duration-picker",
   "homepage": "https://github.com/josejbreijo/ng-duration-picker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "authors": [
     "Jose J. Breijo <josejbreijo99@gmail.com>",
     "Adrian Hernandez <adrian2monk@gmail.com>"
   ],
   "description": "Lightweight AngularJS directive to select time in a MomentJS style: \"1 year 2 months\".",
-  "main": "./dist/ng-duration-picker.js",
+  "main": [
+    "./dist/ng-duration-picker.js",
+    "./dist/ng-duration-picker.css"
+  ],
   "keywords": [
     "angular",
     "time",
